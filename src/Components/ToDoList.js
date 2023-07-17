@@ -14,6 +14,7 @@ const ToDoList = () => {
     title: "",
     isComplete: false,
     items: [],
+    editingItemId: null,
   });
   //   console.log(data, "datadata");
 
@@ -26,18 +27,35 @@ const ToDoList = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    const newItem = {
-      id: Date.now(),
-      title: data.title,
-    };
-    setData((oldData) => ({
-      ...oldData,
-      items: [...oldData.items, newItem],
-      title: "",
-    }));
+    if (data.title !== "") {
+      const newItem = {
+        id: Date.now(),
+        title: data.title,
+      };
+      setData((oldData) => ({
+        ...oldData,
+        items: [...oldData.items, newItem],
+        title: "",
+        isComplete: false,
+      }));
+    } else {
+      setData((oldData) => ({
+        ...oldData,
+        title: "",
+      }));
+    }
   };
 
-  //   const handleEdit = () => {};
+  const handleEdit = (itemId) => {
+    const editedItem = data.items.find((item) => item.id === itemId);
+    if (editedItem) {
+      setData((oldData) => ({
+        ...oldData,
+        title: editedItem.title,
+        editingItemId: itemId,
+      }));
+    }
+  };
 
   const handleCheckboxChange = (itemId) => {
     setData((oldData) => ({
@@ -72,7 +90,9 @@ const ToDoList = () => {
             variant="outlined"
             onChange={handleChange}
           />
-          <Button onClick={handleClick}>Add</Button>
+          <Button onClick={handleClick}>
+            {data.editingItemId !== null ? "Update" : "Add"}
+          </Button>
         </Box>
         <Box>
           {data.items.map((item) => (
@@ -86,7 +106,7 @@ const ToDoList = () => {
                 <ListItem key={item.id}>{item.title}</ListItem>
               </Box>
               <Box>
-                {/* <Button onClick={() => handleEdit(item.id)}>edit</Button> */}
+                <Button onClick={() => handleEdit(item.id)}>edit</Button>
                 <FormControlLabel
                   control={
                     <Checkbox
