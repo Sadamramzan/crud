@@ -3,11 +3,34 @@ import React, { useState } from "react";
 
 const TodoList = () => {
   const [todos, setTodos] = useState([]);
+
+  // todos = [
+  //   {
+  //     id: 0,
+  //     isComplete: false,
+  //     title:""
+  //   },
+  // ];
+
   const [inputValue, setInputValue] = useState("");
   const [editingItemId, setEditingItemId] = useState(null);
+  // editingItemId = [
+  //   {
+  //     id: 0,
+  //     isComplete: false,
+  //     title:""
+  //   },
+  // ];
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
+  };
+
+  const handleOnkeypress = (e) => {
+    console.log(e.key, "====================================");
+    if (e.key === "Enter") {
+      handleAddTodo() || handleUpdateTodo();
+    }
   };
 
   const handleAddTodo = () => {
@@ -17,6 +40,9 @@ const TodoList = () => {
         title: inputValue,
         isComplete: false,
       };
+
+      // {id:0 , title:"" isComplete:false}
+
       setTodos([...todos, newTodo]);
       setInputValue("");
     }
@@ -41,11 +67,21 @@ const TodoList = () => {
     }
   };
 
+  // const handleToggleComplete = (itemId) => {
+  //   const updatedTodos = todos.map((todo) =>
+  //     todo.id === itemId ? { ...todo, isComplete: !todo.isComplete } : todo
+  //   );
+  //   setTodos(updatedTodos);
+  // };
+
   const handleToggleComplete = (itemId) => {
-    const updatedTodos = todos.map((todo) =>
-      todo.id === itemId ? { ...todo, isComplete: !todo.isComplete } : todo
-    );
-    setTodos(updatedTodos);
+    const getdata = todos.findIndex((todo) => todo.id === itemId);
+    setTodos((oldTodos) => {
+      const updatedTodos = [...oldTodos];
+      updatedTodos[getdata].isComplete = !updatedTodos[getdata].isComplete;
+      console.log(updatedTodos[getdata], "updatedTodosupdatedTodos");
+      return updatedTodos;
+    });
   };
 
   const handleDeleteTodo = (itemId) => {
@@ -59,6 +95,7 @@ const TodoList = () => {
         type="text"
         value={inputValue}
         onChange={handleInputChange}
+        onKeyPress={handleOnkeypress}
         placeholder="Enter a todo..."
       />
       {editingItemId !== null ? (
