@@ -1,12 +1,12 @@
 // import "./App.css";
-import ToDoList from "./Components/ToDoList";
-import Todo from "./Components/Todo";
+import CrudCard from "./Components/Crud/CrudCard";
+// import Todo from "./Components/Todo/Todo";
 
 function App() {
   return (
     <div className="App">
-      {/* <ToDoList /> */}
-      <Todo />
+      <CrudCard />
+      {/* <Todo /> */}
     </div>
   );
 }
